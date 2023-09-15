@@ -1,19 +1,24 @@
-import {useState} from 'react';
+import { useState, useEffect} from 'react';
+import axios from 'axios';
 
 function App () {
- 
-  const [creatureList, setCreatureList] = useState([
-    {name :'Unicorn', origin: 'Britain'},
-    {name : 'Sphinx', origin: 'Egypt'},
-    {name: 'Jackalope', origin: 'America'}
-  ]);
+  const [taskList, setTaskList] = useState([]);
+
+  useEffect(() => {
+    axios.get('/tasks')
+      .then((result) => setTaskList(result.data))
+      .catch((e) => {
+        console.log(e);
+        alert('Something went wrong!');
+      });
+  }, []);
   
   return (
     <div>
       <ul>
-        {creatureList.map(creature => (
-          <li key={creature.name}>
-            {creature.name} is from {creature.origin}
+        {taskList.map(task => (
+          <li key={task.id}>
+            {task.description}
           </li>
         ))}
       </ul>
